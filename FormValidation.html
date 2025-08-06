@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>แบบฟอร์มคำร้อง มจท.16</title>
+  <style>
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: linear-gradient(to bottom right, #e8f5e9, #f0f9f4);
+      padding: 30px;
+      margin: 0;
+      color: #1b5e20;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 35px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #1b5e20;
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+      color: #1b5e20;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: 2px solid #c8e6c9;
+      border-radius: 8px;
+      background-color: #f9fff9;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border-color 0.3s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #66bb6a;
+      outline: none;
+    }
+    button {
+      background-color: #388e3c;
+      color: white;
+      border: none;
+      padding: 14px;
+      margin-top: 30px;
+      width: 100%;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background-color: #2e7d32;
+      transform: scale(1.02);
+    }
+    img.logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      max-width: 120px;
+    }
+    @media screen and (max-width: 768px) {
+      .container {
+        padding: 25px;
+        margin: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://upload.wikimedia.org/wikipedia/th/thumb/b/b7/MJU_LOGO.svg/800px-MJU_LOGO.svg.png"
+         alt="โลโก้มหาวิทยาลัยแม่โจ้" class="logo" />
+    <h2>คำร้องขอโอนย้ายสาขาวิชาต่างคณะ (มจท.16)</h2>
+    <form name="form16" onsubmit="return validateForm()">
+
+      <label>วันที่ยื่นคำร้อง:
+        <input type="date" name="submitDate" required />
+      </label>
+
+      <label>คำนำหน้า:
+        <select name="prefix" required>
+          <option value="">-- เลือก --</option>
+          <option>นาย</option>
+          <option>นาง</option>
+          <option>นางสาว</option>
+        </select>
+      </label>
+
+      <label>ชื่อ-นามสกุล:
+        <input type="text" name="fullname" required pattern="^[ก-๙a-zA-Z\s]+$" title="กรอกเฉพาะภาษาไทยหรืออังกฤษเท่านั้น" />
+      </label>
+
+      <label>รหัสนักศึกษา:
+        <input type="text" name="studentID" required maxlength="10"
+               pattern="^\d{10}$" inputmode="numeric"
+               title="กรุณากรอกรหัสนักศึกษา 10 หลัก (เฉพาะตัวเลข)"
+               oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+               onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+      </label>
+
+      <label>เบอร์มือถือ:
+        <input type="text" name="phone" required maxlength="10"
+               pattern="^(06|08|09)\d{8}$" inputmode="numeric"
+               title="กรุณากรอกเบอร์มือถือ เช่น 09XXXXXXXX (เฉพาะตัวเลข)"
+               oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+               onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+      </label>
+
+      <label>ปีการศึกษาปัจจุบัน:
+        <select name="year" required>
+          <option value="">-- เลือก --</option>
+          <option>4-5 ปี</option>
+          <option>4 ปี เทียบเข้าเรียน (2ปี)</option>
+        </select>
+      </label>
+
+      <label>ระบบการเรียน:
+        <select name="system" required>
+          <option value="">-- เลือก --</option>
+          <option>ภาคปกติ</option>
+          <option>ภาคสมทบ</option>
+        </select>
+      </label>
+
+      <label>คณะเดิม:
+        <input type="text" name="currentFaculty" required pattern="^[ก-๙a-zA-Z0-9\s]+$" title="กรอกชื่อคณะด้วยภาษาไทยหรืออังกฤษ" />
+      </label>
+
+      <label>สาขาเดิม:
+        <input type="text" name="currentMajor" required pattern="^[ก-๙a-zA-Z0-9\s]+$" title="กรอกชื่อสาขาด้วยภาษาไทยหรืออังกฤษ" />
+      </label>
+
+      <label>คณะที่ต้องการย้ายไป:
+        <input type="text" name="newFaculty" required pattern="^[ก-๙a-zA-Z0-9\s]+$" title="กรอกชื่อคณะด้วยภาษาไทยหรืออังกฤษ" />
+      </label>
+
+      <label>สาขาที่ต้องการย้ายไป:
+        <input type="text" name="newMajor" required pattern="^[ก-๙a-zA-Z0-9\s]+$" title="กรอกชื่อสาขาด้วยภาษาไทยหรืออังกฤษ" />
+      </label>
+
+      <label>เหตุผลในการย้าย:
+        <textarea name="reason" rows="4" required minlength="30"
+                  pattern="^[ก-๙a-zA-Z0-9\s]+$"
+                  title="กรุณากรอกเหตุผลอย่างน้อย 30 ตัวอักษร (เฉพาะข้อความภาษาไทย/อังกฤษ)" ></textarea>
+      </label>
+
+      <button type="submit">ยื่นคำร้อง</button>
+    </form>
+  </div>
+
+  <script>
+    function validateForm() {
+      const form = document.forms["form16"];
+      const reason = form["reason"].value.trim();
+      const studentID = form["studentID"].value;
+      const phone = form["phone"].value;
+
+      if (reason.length < 30) {
+        alert("เหตุผลต้องมีความยาวอย่างน้อย 30 ตัวอักษร");
+        return false;
+      }
+
+      if (!/^\d{10}$/.test(studentID)) {
+        alert("กรุณากรอกรหัสนักศึกษา 10 หลัก (เฉพาะตัวเลข)");
+        return false;
+      }
+
+      if (!/^(06|08|09)\d{8}$/.test(phone)) {
+        alert("กรุณากรอกเบอร์มือถือ เช่น 09XXXXXXXX (เฉพาะตัวเลข)");
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+</body>
+</html>
+

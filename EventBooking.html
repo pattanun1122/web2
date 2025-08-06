@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ฟอร์มจองตั๋วกิจกรรม - แม่โจ้</title>
+  <style>
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background-color: #f0f9f4;
+      padding: 30px;
+      color: #2e4d2c;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      max-width: 120px;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      color: #1b5e20;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    form {
+      background-color: #ffffff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: auto;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #c8e6c9;
+      border-radius: 5px;
+      background-color: #f9fff9;
+    }
+
+    button {
+      background-color: #388e3c;
+      color: white;
+      border: none;
+      padding: 12px;
+      margin-top: 20px;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2e7d32;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #ffffff;
+      padding: 25px;
+      border: 2px solid #4caf50;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      text-align: center;
+      font-size: 18px;
+      color: #1b5e20;
+    }
+  </style>
+</head>
+<body>
+
+<div class="logo">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKugH5mM165AuAIrQzlJOLm-ObPLGEakQADQ&s" alt="โลโก้มหาวิทยาลัยแม่โจ้">
+</div>
+
+<h2>ฟอร์มจองตั๋วกิจกรรม มหาวิทยาลัยแม่โจ้</h2>
+
+<form id="bookingForm">
+  <label>ชื่อ-นามสกุล:</label>
+  <input type="text" id="fullname" required
+         pattern="^[^\s]+(\s+[^\s]+)+$"
+         title="กรุณากรอกชื่อ-นามสกุลให้ครบอย่างน้อย 2 คำ">
+
+  <label>เบอร์โทรศัพท์:</label>
+  <input type="tel" id="phone" required
+         pattern="^0\d{9}$"
+         inputmode="numeric"
+         title="เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลักและขึ้นต้นด้วย 0">
+
+  <label>ประเภทตั๋ว:</label>
+  <select id="ticketType">
+    <option value="ปกติ">ปกติ</option>
+    <option value="VIP">VIP</option>
+    <option value="Premium">Premium</option>
+  </select>
+
+  <label>จำนวนตั๋ว:</label>
+  <input type="number" id="ticketCount" min="1" max="5" required>
+
+  <button type="submit">จองตั๋ว</button>
+  <div class="error" id="errorMsg"></div>
+</form>
+
+<div class="modal" id="successModal"></div>
+
+<script>
+  document.getElementById("bookingForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const fullname = document.getElementById("fullname").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const ticketType = document.getElementById("ticketType").value;
+    const ticketCount = parseInt(document.getElementById("ticketCount").value);
+    const errorMsg = document.getElementById("errorMsg");
+    const modal = document.getElementById("successModal");
+
+    errorMsg.textContent = "";
+
+    // Validation ด้วย JavaScript (เพิ่มเติมจาก pattern)
+    if (!/^[^\s]+(\s+[^\s]+)+$/.test(fullname)) {
+      errorMsg.textContent = "กรุณากรอกชื่อ-นามสกุลให้ครบอย่างน้อย 2 คำ";
+      return;
+    }
+
+    if (!/^0\d{9}$/.test(phone)) {
+      errorMsg.textContent = "เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลักและขึ้นต้นด้วย 0";
+      return;
+    }
+
+    if (ticketCount < 1 || ticketCount > 5) {
+      errorMsg.textContent = "จำนวนตั๋วต้องอยู่ระหว่าง 1 ถึง 5";
+      return;
+    }
+
+    if ((ticketType === "VIP" || ticketType === "Premium") && ticketCount > 2) {
+      errorMsg.textContent = "ประเภท VIP หรือ Premium จำกัดจำนวนตั๋วไม่เกิน 2";
+      return;
+    }
+
+    // Success
+    modal.textContent = ` จองตั๋วสำเร็จ จำนวน: ${ticketCount} ประเภท: ${ticketType}`;
+    modal.style.display = "block";
+  });
+
+  // ป้องกันการพิมพ์ตัวอักษรในช่องเบอร์โทร
+  document.getElementById("phone").addEventListener("keypress", function(e) {
+    if (!/[0-9]/.test(e.key)) {
+      e.preventDefault();
+    }
+  });
+</script>
+
+</body>
+</html>
